@@ -16,20 +16,24 @@ public class Autor {
         this.name = name;
     }
 
-    public int getBirth_year() {
+    public int getBirthYear() {
         return birth_year;
     }
 
-    public void setBirth_year(int birth_year) {
-        this.birth_year = birth_year;
+    public void setBirthYear(int birthYear) {
+        this.birth_year = birthYear;
     }
 
-    public Integer getDeath_year() {
+    public Integer getDeathYear() {
         return death_year;
     }
 
-    public void setDeath_year(Integer death_year) {
-        this.death_year = death_year;
+    public void setDeathYear(Integer deathYear) {
+        this.death_year = deathYear;
+    }
+
+    public boolean isAliveInYear(int year) {
+        return (birth_year <= year) && (death_year == null || death_year > year);
     }
 
     @Override
@@ -37,6 +41,8 @@ public class Autor {
         return "Autor{" +
                 "name='" + name + '\'' +
                 ", birthYear=" + birth_year +
+                (death_year != null ? ", deathYear=" + death_year : "") +
                 '}';
     }
+
 }

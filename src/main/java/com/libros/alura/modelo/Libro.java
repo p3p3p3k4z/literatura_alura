@@ -18,6 +18,8 @@ public class Libro {
 
     private List<Autor> authors;
 
+    private int downloadCount;
+
     // Constructor por defecto
     public Libro() {
     }
@@ -62,14 +64,35 @@ public class Libro {
         this.authors = authors;
     }
 
+    public String getPrimaryLanguage() {
+        return (languages != null && !languages.isEmpty()) ? languages.get(0) : "Desconocido";
+    }
+
+    public Autor getPrimaryAuthor() {
+        return (authors != null && !authors.isEmpty()) ? authors.get(0) : null;
+    }
+
+    public boolean isWrittenInLanguage(String language) {
+        return languages != null && languages.contains(language);
+    }
+
+    public int getDownloadCount() {
+        return downloadCount;
+    }
+
+    public void setDownloadCount(int downloadCount) {
+        this.downloadCount = downloadCount;
+    }
+
     @Override
     public String toString() {
         return "Libro{" +
                 "title='" + title + '\'' +
                 ", publicationDate='" + publicationDate + '\'' +
-                ", languages=" + languages +
+                ", primaryLanguage='" + getPrimaryLanguage() + '\'' +
                 ", subjects=" + subjects +
-                ", authors=" + authors +
+                ", primaryAuthor=" + getPrimaryAuthor() +
                 '}';
     }
+
 }
