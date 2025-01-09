@@ -1,27 +1,37 @@
 package com.libros.alura.modelo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true) // Ignora campos desconocidos como "id"
+@Entity
 public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
 
-    @JsonProperty("publication_date")
+    @Column(name = "publication_date")
     private String publicationDate;
 
+    @ElementCollection
     private List<String> languages;
 
+    @ElementCollection
     private List<String> subjects;
 
-    private List<Autor> authors;
+    @ManyToOne
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
 
-    private int downloadCount;
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
 
-    // Constructor por defecto
-    public Libro() {
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -56,43 +66,24 @@ public class Libro {
         this.subjects = subjects;
     }
 
-    public List<Autor> getAuthors() {
-        return authors;
+    public Autor getAutor() {
+        return autor;
     }
 
-    public void setAuthors(List<Autor> authors) {
-        this.authors = authors;
-    }
-
-    public String getPrimaryLanguage() {
-        return (languages != null && !languages.isEmpty()) ? languages.get(0) : "Desconocido";
-    }
-
-    public Autor getPrimaryAuthor() {
-        return (authors != null && !authors.isEmpty()) ? authors.get(0) : null;
-    }
-
-    public boolean isWrittenInLanguage(String language) {
-        return languages != null && languages.contains(language);
-    }
-
-    public int getDownloadCount() {
-        return downloadCount;
-    }
-
-    public void setDownloadCount(int downloadCount) {
-        this.downloadCount = downloadCount;
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
     @Override
-    public String toString() {
-        return "Libro{" +
-                "title='" + title + '\'' +
-                ", publicationDate='" + publicationDate + '\'' +
-                ", primaryLanguage='" + getPrimaryLanguage() + '\'' +
-                ", subjects=" + subjects +
-                ", primaryAuthor=" + getPrimaryAuthor() +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Libro libro = (Libro) o;
+        return id.equals(libro.id);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

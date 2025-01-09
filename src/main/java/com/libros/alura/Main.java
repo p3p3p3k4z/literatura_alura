@@ -149,23 +149,28 @@ public class Main {
 
     private static void listarAutoresVivosEnAno() {
         System.out.print("Ingresa el año para buscar autores vivos: ");
-        int ano = Integer.parseInt(scanner.nextLine());
+        try {
+            int ano = Integer.parseInt(scanner.nextLine());
 
-        List<Autor> autoresVivos = catalogoLibros.stream()
-                .map(libro -> libro.getAuthors().get(0))
-                .filter(autor -> autor.getBirthYear() <= ano &&
-                        (autor.getDeathYear() == null || autor.getDeathYear() > ano))
-                .toList();
+            List<Autor> autoresVivos = catalogoLibros.stream()
+                    .map(libro -> libro.getAuthors().get(0))
+                    .filter(autor -> autor.getBirthYear() <= ano &&
+                            (autor.getDeathYear() == null || autor.getDeathYear() > ano))
+                    .toList();
 
-        if (autoresVivos.isEmpty()) {
-            System.out.println("No se encontraron autores vivos en el año: " + ano);
-        } else {
-            System.out.println("\n=== Autores vivos en el año " + ano + " ===");
-            autoresVivos.forEach(autor -> {
-                System.out.println("Nombre: " + autor.getName() +
-                        " (Nacido: " + autor.getBirthYear() +
-                        ", Fallecido: " + (autor.getDeathYear() != null ? autor.getDeathYear() : "Vivo") + ")");
-            });
+            if (autoresVivos.isEmpty()) {
+                System.out.println("No se encontraron autores vivos en el año: " + ano);
+            } else {
+                System.out.println("\n=== Autores vivos en el año " + ano + " ===");
+                autoresVivos.forEach(autor -> {
+                    System.out.println("Nombre: " + autor.getName() +
+                            " (Nacido: " + autor.getBirthYear() +
+                            ", Fallecido: " + (autor.getDeathYear() != null ? autor.getDeathYear() : "Vivo") + ")");
+                });
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Entrada no válida. Por favor, ingresa un número entero para el año.");
         }
     }
+
 }

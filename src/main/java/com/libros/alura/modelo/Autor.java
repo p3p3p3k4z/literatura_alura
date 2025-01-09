@@ -1,13 +1,31 @@
 package com.libros.alura.modelo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import java.util.Objects;
 
+@Entity
 public class Autor {
-    private String name;
-    private int birth_year;
-    private Integer death_year; // Usamos Integer para permitir valores null
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Getters y setters
+    private String name;
+    private int birthYear;
+    private Integer deathYear;
+
+    // Relación con libros (Un autor puede tener varios libros)
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libros;
+
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -17,32 +35,39 @@ public class Autor {
     }
 
     public int getBirthYear() {
-        return birth_year;
+        return birthYear;
     }
 
     public void setBirthYear(int birthYear) {
-        this.birth_year = birthYear;
+        this.birthYear = birthYear;
     }
 
     public Integer getDeathYear() {
-        return death_year;
+        return deathYear;
     }
 
     public void setDeathYear(Integer deathYear) {
-        this.death_year = deathYear;
+        this.deathYear = deathYear;
     }
 
-    public boolean isAliveInYear(int year) {
-        return (birth_year <= year) && (death_year == null || death_year > year);
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
     }
 
     @Override
-    public String toString() {
-        return "Autor{" +
-                "name='" + name + '\'' +
-                ", birthYear=" + birth_year +
-                (death_year != null ? ", deathYear=" + death_year : "") +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Autor autor = (Autor) o;
+        return id.equals(autor.id);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
